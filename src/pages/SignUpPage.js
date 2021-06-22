@@ -1,26 +1,40 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 import MainStyle from '../layouts/MainStyle';
-import { 
-    Box,
-    Input,
-    Error,
-    Button,
-    StyledLink
-  } from '../components/common/Components';
+import { Box, Input, Error, Button, StyledLink } from '../components/common/Components';
 
 export default function SignUpPage(){
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-  
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const history = useHistory();
 
-    function signUp(){
-        console.log("ok")
-    }
+    function signUp (e) {
+        e.preventDefault();
+        setLoading(true);
+    
+        const request = axios.post('http://localhost:4000/sign-up', {
+          name,
+          email,
+          password,
+          confirmPassword
+        });
+    
+        request.then(() => {
+          alert('Usuário cadastrado com sucesso! Faça login para acessar sua conta.');
+          history.push('/login');
+        });
+    
+        request.catch(() => {
+          setError('Dados inválidos. Verifique os campos e tente novamente.');
+          setLoading(false);
+        });
+      }
 
     return (
         <MainStyle>

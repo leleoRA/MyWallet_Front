@@ -1,16 +1,47 @@
 import { useHistory } from "react-router";
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
 import styled from "styled-components";
 import { IoExitOutline } from "react-icons/io5";
 import { BsDashCircle, BsPlusCircle } from "react-icons/bs";
 
 export default function Home(){
+    const [events, setEvents] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(true);
+    // const { userData } = useContext(UserContext);  
     const history = useHistory();
     
+    useEffect(() => {
+        const request = axios.get('http://localhost:4000/api/finances', {
+        //   headers: {
+        //     Authorization: `Bearer ${userData.token}`
+        //   }
+        });
+    
+        request.then(res => {
+          setEvents(res.data);
+          setLoading(false);
+          calculateTotal(res.data);
+        });
+      }, []);
+
     function goTo (path) {
         history.push(path);
     }
 
+    function calculateTotal (events) {
+        let total = 0;
+    
+        events.forEach(e => {
+          if (e.event_type === "revenue") total += e.value;
+          else total -= e.value;
+        });
+    
+        setTotal(total);
+    }
+    
     return(
         <>
             <Box>

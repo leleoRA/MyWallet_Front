@@ -47,6 +47,12 @@ export const StyledLink = styled(Link)`
 export const Error = styled.div`
   margin: 10px 0;
   color: #DC3545;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
 `;
 
 export const Container = styled.div`
