@@ -12,7 +12,7 @@ export default function LoginPage(){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const history = useHistory();
-    // const { setUserData } = useContext(UserContext);
+    const { setUserData } = useContext(UserContext);
   
     function signIn (e) {
         e.preventDefault();
@@ -24,9 +24,9 @@ export default function LoginPage(){
         });
     
         request.then(res => {
-        //   setUserData({
-        //     token: res.data.token
-        //   });
+          setUserData({
+            token: res.data.token
+          });
     
           history.push('/');
         });
