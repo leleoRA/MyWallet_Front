@@ -69,7 +69,7 @@ export default function Home(){
         <>
             <Box>
                 <Title>
-                    Olá, ${userData.name}
+                    Olá, {userData.name}
                 </Title>
                 <IoExitOutline onClick={() => logout()} size="32" color="#FFF"/>
             </Box>
