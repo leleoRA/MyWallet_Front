@@ -78,26 +78,28 @@ export default function Home(){
                 </Title>
                 <IoExitOutline onClick={logout} size="32" color="#FFF"/>
             </Box>
-            {loading ? 
-                <NoRegisters>
-                    <p>Não há registros de <br/>entrada ou saída</p>
-                </NoRegisters> 
-                : 
+            {(loading || events.length !== 0) ? 
                 <RegisterBox>
                     <Registers>
                         {events.map((e, i) => (
                             <Event key={i}>
                                 <Date>{dayjs(e.date).format('DD/MM')}</Date>
-                                <Description>{e.description}</Description>
-                                <Value type={e.eventType}>{e.value}</Value>
+                                <Element>
+                                    <Description>{e.description}</Description>
+                                    <Value type={e.eventType}>{((e.value)/100).toFixed(2).replace(".",",")}</Value>
+                                </Element>
                             </Event>
                         ))}
                     </Registers>
                     <Balance positive={total >= 0}>
                         <h1>SALDO</h1>
-                        <p>{Math.abs(total)}</p>
+                        <p>{((total/100).toFixed(2).replace(".",",").replace("-",""))}</p>
                     </Balance>
                 </RegisterBox>
+                :
+                <NoRegisters>
+                    <p>Não há registros de <br/>entrada ou saída</p>
+                </NoRegisters> 
             }
             <Actions>
                 <AddRemove onClick={() => goTo('/add-revenue')}>
@@ -160,6 +162,14 @@ const Registers = styled.ul`
     list-style-type: none;
     padding: 0;
     margin: 0;
+    max-height: 90%;
+    overflow: scroll;
+`;
+
+const Event = styled.li`
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
 `;
 
 const Date = styled.div`
@@ -167,10 +177,10 @@ const Date = styled.div`
     color: #C6C6C6;
 `;
 
-const Event = styled.li`
+const Element = styled.div`
     display: flex;
     justify-content: space-between;
-    padding: 8px;
+    width: 75%;
 `;
 
 const Description = styled.div`

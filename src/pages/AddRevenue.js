@@ -52,7 +52,7 @@ export default function AddRevenue(){
             <AddStyle>
                 <Box>
                     <form onSubmit={submitRevenue}>
-                        <Input type="number" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)} />
+                        <Input type="number" placeholder="Valor (em centavos)" value={value} onChange={e => setValue(e.target.value)} />
                         <Input type="text" placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)} />
                         {
                             error && <Error>{ error }</Error>
