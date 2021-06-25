@@ -27,7 +27,7 @@ export default function SignUpPage(){
     
         request.then(() => {
           alert('Usuário cadastrado com sucesso! Faça login para acessar sua conta.');
-          history.push('/login');
+          history.push('/');
         });
     
         request.catch(() => {
@@ -51,7 +51,7 @@ export default function SignUpPage(){
                         Cadastrar
                     </Button>
                 </form>
-                <StyledLink to="/login">Já tem uma conta? Entre agora!</StyledLink>
+                <StyledLink to="/">Já tem uma conta? Entre agora!</StyledLink>
             </Box>
         </MainStyle>
     );

@@ -14,6 +14,7 @@ export default function AddRevenue(){
     const [loading, setLoading] = useState(false);
     const { userData } = useContext(UserContext);
     const history = useHistory();  
+    const localUser = JSON.parse(localStorage.getItem("user"));
 
     function submitRevenue(e){
         e.preventDefault();
@@ -28,13 +29,13 @@ export default function AddRevenue(){
             {
                 headers: 
                     {
-                        Authorization: `Bearer ${userData.token}`
+                        Authorization: `Bearer ${userData.token || localUser}`
                     }
             }
         );
 
         request.then(() => {
-            history.push('/');
+            history.push('/home');
         });
 
         request.catch(() => {
@@ -59,7 +60,7 @@ export default function AddRevenue(){
                         <Button type="submit" disabled={loading} backgroundColor="#A328D6">
                             Salvar entrada
                         </Button>
-                        <StyledLink to="/">Voltar</StyledLink>
+                        <StyledLink to="/home">Voltar</StyledLink>
                     </form>
                 </Box>
             </AddStyle>

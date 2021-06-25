@@ -16,7 +16,7 @@ export default function App(){
             <BrowserRouter>
                 <Switch>
 
-                    <Route path="/login" exact >
+                    <Route path="/" exact >
                         <LoginPage />
                     </Route>
 
@@ -24,7 +24,7 @@ export default function App(){
                         <SignUpPage />
                     </Route>
 
-                    <Route path="/" exact>
+                    <Route path="/home" exact>
                         <Home />
                     </Route>
 

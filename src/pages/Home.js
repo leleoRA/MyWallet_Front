@@ -14,13 +14,14 @@ export default function Home(){
     const [loading, setLoading] = useState(true);
     const { userData } = useContext(UserContext);  
     const history = useHistory();
+    const localUser = JSON.parse(localStorage.getItem("user"));
     
     useEffect(() => {
         const request = axios.get('http://localhost:4000/finances', 
             {
                 headers: 
                     {
-                        Authorization: `Bearer ${userData.token}`
+                        Authorization: `Bearer ${userData.token || localUser}`
                     }
             }
         );
@@ -30,7 +31,7 @@ export default function Home(){
           setLoading(false);
           calculateTotal(res.data);
         });
-      }, []); 
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function goTo(path){
         history.push(path);
@@ -51,16 +52,20 @@ export default function Home(){
 
     function logout(){
         if(window.confirm("Deseja sair da sua conta?")){
-            const request = axios.post('http://localhost:4000/logout', 
+            const request = axios.post('http://localhost:4000/logout', {},
             {
                 headers: 
                     {
-                        Authorization: `Bearer ${userData.token}`
+                        Authorization: `Bearer ${userData.token || localUser}`
                     }
             }
             );
             request.then(() => {
-                history.push('/login');
+                localStorage.removeItem("user");
+                history.push('/');
+            })
+            request.catch(() => {
+                alert("Ocorreu um erro. Tente novamente.")
             })
         } 
     }
@@ -71,7 +76,7 @@ export default function Home(){
                 <Title>
                     Olá, {userData.name}
                 </Title>
-                <IoExitOutline onClick={() => logout()} size="32" color="#FFF"/>
+                <IoExitOutline onClick={logout} size="32" color="#FFF"/>
             </Box>
             {loading ? 
                 <NoRegisters>

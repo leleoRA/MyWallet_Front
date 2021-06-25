@@ -14,6 +14,7 @@ export default function AddExpense(){
     const [loading, setLoading] = useState(false);
     const { userData } = useContext(UserContext);
     const history = useHistory();
+    const localUser = JSON.parse(localStorage.getItem("user"));
 
     function submitExpense(e){
         e.preventDefault();
@@ -28,13 +29,13 @@ export default function AddExpense(){
             {
                 headers: 
                     {
-                        Authorization: `Bearer ${userData.token}`
+                        Authorization: `Bearer ${userData.token || localUser}`
                     }
             }
         );
 
         request.then(() => {
-            history.push('/');
+            history.push('/home');
         });
 
         request.catch(() => {
@@ -59,7 +60,7 @@ export default function AddExpense(){
                         <Button type="submit" disabled={loading} backgroundColor="#A328D6">
                             Salvar saída
                         </Button>
-                        <StyledLink to="/">Voltar</StyledLink>
+                        <StyledLink to="/home">Voltar</StyledLink>
                     </form>
                 </Box>
             </AddStyle>

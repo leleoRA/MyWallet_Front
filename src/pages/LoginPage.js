@@ -28,8 +28,8 @@ export default function LoginPage(){
             token: res.data.token,
             name: res.data.name
           });
-    
-          history.push('/');
+          localStorage.setItem("user", JSON.stringify(res.data.token));
+          history.push('/home');
         });
     
         request.catch(() => {
