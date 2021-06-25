@@ -1,58 +1,99 @@
 import { useHistory } from "react-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 import styled from "styled-components";
 import { IoExitOutline } from "react-icons/io5";
 import { BsDashCircle, BsPlusCircle } from "react-icons/bs";
+import UserContext from '../contexts/UserContext';
 
 export default function Home(){
     const [events, setEvents] = useState([]);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
-    // const { userData } = useContext(UserContext);  
+    const { userData } = useContext(UserContext);  
     const history = useHistory();
     
     useEffect(() => {
-        const request = axios.get('http://localhost:4000/api/finances', {
-        //   headers: {
-        //     Authorization: `Bearer ${userData.token}`
-        //   }
-        });
+        const request = axios.get('http://localhost:4000/finances', 
+            {
+                headers: 
+                    {
+                        Authorization: `Bearer ${userData.token}`
+                    }
+            }
+        );
     
         request.then(res => {
           setEvents(res.data);
           setLoading(false);
           calculateTotal(res.data);
         });
-      }, []);
+      }, []); 
 
-    function goTo (path) {
+    function goTo(path){
         history.push(path);
     }
 
-    function calculateTotal (events) {
+    function calculateTotal(events){
         let total = 0;
     
         events.forEach(e => {
-          if (e.event_type === "revenue") total += e.value;
-          else total -= e.value;
+          if (e.eventType === "revenue"){
+            total += e.value;
+          } else{
+            total -= e.value;
+          }
         });
-    
         setTotal(total);
+    }
+
+    function logout(){
+        if(window.confirm("Deseja sair da sua conta?")){
+            const request = axios.post('http://localhost:4000/logout', 
+            {
+                headers: 
+                    {
+                        Authorization: `Bearer ${userData.token}`
+                    }
+            }
+            );
+            request.then(() => {
+                history.push('/login');
+            })
+        } 
     }
     
     return(
         <>
             <Box>
                 <Title>
-                    Olá, Fulano
+                    Olá, ${userData.name}
                 </Title>
-                <IoExitOutline size="32" color="#FFF"/>
+                <IoExitOutline onClick={() => logout()} size="32" color="#FFF"/>
             </Box>
-            <RegisterBox>
-                
-            </RegisterBox>
+            {loading ? 
+                <NoRegisters>
+                    <p>Não há registros de <br/>entrada ou saída</p>
+                </NoRegisters> 
+                : 
+                <RegisterBox>
+                    <Registers>
+                        {events.map((e, i) => (
+                            <Event key={i}>
+                                <Date>{dayjs(e.date).format('DD/MM')}</Date>
+                                <Description>{e.description}</Description>
+                                <Value type={e.eventType}>{e.value}</Value>
+                            </Event>
+                        ))}
+                    </Registers>
+                    <Balance positive={total >= 0}>
+                        <h1>SALDO</h1>
+                        <p>{Math.abs(total)}</p>
+                    </Balance>
+                </RegisterBox>
+            }
             <Actions>
                 <AddRemove onClick={() => goTo('/add-revenue')}>
                     <BsPlusCircle size="20" color="#FFF"/>
@@ -87,6 +128,71 @@ const RegisterBox = styled.div`
     border-radius: 5px;
     width: 90%;
     margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+`;
+
+const NoRegisters = styled.div`
+    height: 446px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p{
+        text-align: center;
+        color: #868686;
+        font-size: 20px;
+    }
+`;
+
+const Registers = styled.ul`
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+`;
+
+const Date = styled.div`
+    font-size: 16px;
+    color: #C6C6C6;
+`;
+
+const Event = styled.li`
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+`;
+
+const Description = styled.div`
+    color: #000;
+    font-size: 16px;
+`;
+
+const Value = styled.div`
+    color: ${props => props.type === 'revenue' ? '#28A745' : '#DC3545'};
+`;
+
+const Balance = styled.div`
+    padding: 0 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1{
+        font-size: 17px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    p{
+        color: ${props => props.positive ? '#28A745' : '#DC3545'};
+        font-size: 16px;
+    }
 `;
 
 const Actions = styled.div`
@@ -115,4 +221,3 @@ const AddRemove = styled.button`
         text-align: start;
     }
 `;
-

@@ -12,22 +12,26 @@ export default function AddExpense(){
     const [error, setError] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
-    // const { userData } = useContext(UserContext);
+    const { userData } = useContext(UserContext);
     const history = useHistory();
 
     function submitExpense(e){
         e.preventDefault();
         setLoading(true);
 
-        const request = axios.post('http://localhost:4000/api/finances', {
-        value,
-        description,
-        event_type: 'expense'
-        }, {
-        // headers: {
-        //     Authorization: `Bearer ${userData.token}`
-        // }
-        });
+        const request = axios.post('http://localhost:4000/finances', 
+            {
+                value,
+                description,
+                eventType: 'expense'
+            }, 
+            {
+                headers: 
+                    {
+                        Authorization: `Bearer ${userData.token}`
+                    }
+            }
+        );
 
         request.then(() => {
             history.push('/');

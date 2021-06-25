@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import GlobalStyle from '../components/GlobalStyle';
 
-import UserContext, { UserProvider } from '../contexts/UserContext';
+import { UserProvider } from '../contexts/UserContext';
 import LoginPage from '../pages/LoginPage';
 import SignUpPage from '../pages/SignUpPage';
 import Home from '../pages/Home';

@@ -25,7 +25,7 @@ export default function LoginPage(){
     
         request.then(res => {
           setUserData({
-            token: res.data.token
+            token: res.data
           });
     
           history.push('/');
