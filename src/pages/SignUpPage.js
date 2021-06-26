@@ -18,7 +18,7 @@ export default function SignUpPage(){
         e.preventDefault();
         setLoading(true);
     
-        const request = axios.post('http://localhost:4000/sign-up', {
+        const request = axios.post('https://back-mywallet.herokuapp.com/sign-up', {
           name,
           email,
           password,

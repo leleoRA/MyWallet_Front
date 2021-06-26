@@ -20,7 +20,7 @@ export default function AddExpense(){
         e.preventDefault();
         setLoading(true);
 
-        const request = axios.post('http://localhost:4000/finances', 
+        const request = axios.post('https://back-mywallet.herokuapp.com/finances', 
             {
                 value,
                 description,

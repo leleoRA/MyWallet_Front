@@ -17,7 +17,7 @@ export default function Home(){
     const localUser = JSON.parse(localStorage.getItem("user"));
     
     useEffect(() => {
-        const request = axios.get('http://localhost:4000/finances', 
+        const request = axios.get('https://back-mywallet.herokuapp.com/finances', 
             {
                 headers: 
                     {
@@ -52,7 +52,7 @@ export default function Home(){
 
     function logout(){
         if(window.confirm("Deseja sair da sua conta?")){
-            const request = axios.post('http://localhost:4000/logout', {},
+            const request = axios.post('https://back-mywallet.herokuapp.com/logout', {},
             {
                 headers: 
                     {
